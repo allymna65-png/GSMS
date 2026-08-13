@@ -4,73 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSMS Team Hub & Tracker</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
 
-    <!-- SUPABASE CLIENT INITIALIZATION -->
     <script>
         const SUPABASE_URL = 'https://dxzsgsjzbwdtbluorkxx.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4enNnc2p6YndkdGJsdW9ya3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzkwMjQsImV4cCI6MjEwMjIxNTAyNH0.ehJLFUA_M3Whyd7gBecn_yCXJHeqHuCNxRtRNxJYxI0';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     </script>
 
-    <!-- 1. AUTHENTICATION & BOOTSTRAPPING SCREEN -->
+    <!-- AUTHENTICATION SCREEN -->
     <div id="authScreen" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
+        <div class="bg-slate-800 border border-slate-700 p-6 sm:p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
+            
+            <!-- HEADER -->
             <div class="text-center">
-                <div class="inline-flex p-3 bg-blue-600/20 text-blue-400 rounded-xl mb-3">
+                <div class="inline-flex p-3 bg-blue-600/20 text-blue-400 rounded-xl mb-2">
                     <i data-lucide="shield-check" class="w-8 h-8"></i>
                 </div>
                 <h1 class="text-2xl font-bold text-white">GSMS Team Hub</h1>
-                <p class="text-xs text-slate-400 mt-1">Ingia au Sajili Lead Admin Mpya</p>
+                <p class="text-xs text-slate-400 mt-1">Ingia au Usajili Lead Admin Mpya</p>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
+                <h2 class="text-xs font-bold text-blue-400 uppercase tracking-wider">1. Login Ya Watumiaji</h2>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Registration No / Email</label>
-                    <input type="text" id="loginIdentifier" required placeholder="TCC_PRG_XXXX au Email" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <input type="text" id="loginIdentifier" required placeholder="Reg No / Email" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <input type="password" id="loginPassword" required placeholder="Password" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
                 </div>
-                <button type="submit" id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-lg shadow-blue-600/30">
+                <button type="submit" id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 rounded-lg text-sm transition">
                     Sign In
                 </button>
             </form>
 
-            <!-- Toggle Button Kwa ajili ya Admin Registration -->
-            <div class="text-center pt-2">
-                <button type="button" onclick="toggleAdminSetup()" class="text-xs text-amber-400 hover:underline">
-                    👉 Hujajisajili? Bofya hapa kutengeneza Admin
-                </button>
-            </div>
+            <hr class="border-slate-700">
 
-            <!-- Admin Setup Form -->
-            <div id="adminSetupBox" class="hidden pt-4 border-t border-slate-700">
-                <h3 class="text-xs font-bold text-amber-400 mb-2 text-center">Usajili wa Lead Admin Mpya</h3>
-                <form onsubmit="handleAdminSetup(event)" class="space-y-3">
-                    <input type="text" id="adminName" placeholder="Jina Kamili la Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
-                    <input type="email" id="adminEmail" placeholder="Email ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
-                    <input type="password" id="adminPassword" placeholder="Password ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
-                    <button type="submit" id="adminBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 rounded text-xs transition">
-                        Tengeneza Admin Sasa
-                    </button>
-                </form>
-            </div>
+            <!-- ADMIN REGISTRATION FORM (IPO WAZI MOJA KWA MOJA) -->
+            <form id="adminForm" onsubmit="handleAdminSetup(event)" class="space-y-3">
+                <h2 class="text-xs font-bold text-amber-400 uppercase tracking-wider">2. Usajili Wa Lead Admin Mpya</h2>
+                <input type="text" id="adminName" placeholder="Jina Kamili la Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
+                <input type="email" id="adminEmail" placeholder="Email ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
+                <input type="password" id="adminPassword" placeholder="Password ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
+                <button type="submit" id="adminBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 rounded text-xs transition">
+                    Tengeneza Lead Admin
+                </button>
+            </form>
+
         </div>
     </div>
 
-    <!-- 2. MAIN DASHBOARD PORTAL -->
+    <!-- MAIN DASHBOARD PORTAL -->
     <div id="mainDashboard" class="hidden min-h-screen flex flex-col">
-        <!-- Header -->
         <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
             <div class="flex items-center gap-3">
                 <i data-lucide="layout-dashboard" class="text-blue-400"></i>
@@ -88,8 +78,6 @@
         </header>
 
         <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-8">
-
-            <!-- ADMIN PANEL: MEMBER REGISTRATION -->
             <section id="adminPanel" class="hidden bg-slate-800 border border-blue-500/30 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center gap-2 mb-4 text-blue-400">
                     <i data-lucide="user-plus"></i>
@@ -111,7 +99,6 @@
                 </form>
             </section>
 
-            <!-- SUBMIT WORK PROGRESS & MEDIA PROOF -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center gap-2 mb-4 text-emerald-400">
                     <i data-lucide="upload-cloud"></i>
@@ -138,7 +125,6 @@
                 </form>
             </section>
 
-            <!-- REAL-TIME TEAM FEED -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
                 <h3 class="font-bold text-white text-lg flex items-center gap-2">
                     <i data-lucide="activity" class="text-amber-400"></i> Real-time Team Feed
@@ -146,7 +132,6 @@
                 <div id="submissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </section>
 
-            <!-- REAL-TIME CHAT -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
                 <h3 class="font-bold text-white text-lg flex items-center gap-2">
                     <i data-lucide="message-square" class="text-cyan-400"></i> Live Team Inquiries & Chat
@@ -159,21 +144,13 @@
                     </button>
                 </form>
             </section>
-
         </main>
     </div>
 
-    <!-- CORE JAVASCRIPT CONTROLLER -->
     <script>
         lucide.createIcons();
         let currentUser = null;
 
-        function toggleAdminSetup() {
-            const box = document.getElementById('adminSetupBox');
-            box.classList.toggle('hidden');
-        }
-
-        // Handle First Admin Setup
         async function handleAdminSetup(event) {
             event.preventDefault();
             const btn = document.getElementById('adminBtn');
@@ -196,20 +173,18 @@
 
                 if (error) throw error;
 
-                alert("🎉 Admin amesajiliwa kikamilifu!\n\nIngia kwa:\nEmail: " + email + "\nPassword: " + pass);
-                document.getElementById('adminSetupBox').classList.add('hidden');
+                alert("🎉 Lead Admin amesajiliwa kikamilifu!\n\nIngia sasa hivi kwa Email au Reg No TCC_ADMIN.");
                 document.getElementById('loginIdentifier').value = email;
                 document.getElementById('loginPassword').value = pass;
 
             } catch (err) {
                 alert("Usajili Umefeli: " + err.message);
             } finally {
-                btn.innerText = "Tengeneza Admin Sasa";
+                btn.innerText = "Tengeneza Lead Admin";
                 btn.disabled = false;
             }
         }
 
-        // Handle User Login
         async function handleLogin(event) {
             event.preventDefault();
             const btn = document.getElementById('loginBtn');
@@ -393,4 +368,24 @@
             const box = document.getElementById('chatBox');
             box.innerHTML = '';
             data?.forEach(m => {
-               
+                const div = document.createElement('div');
+                div.className = "text-xs space-y-0.5";
+                div.innerHTML = `<strong class="text-cyan-400">${m.sender_name} (${m.reg_no}):</strong> <span class="text-slate-200">${m.message}</span>`;
+                box.appendChild(div);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function subscribeRealtime() {
+            _supabase.channel('public-changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchChats)
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, fetchSubmissions)
+                .subscribe();
+        }
+
+        function logout() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
