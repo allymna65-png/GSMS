@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GSMS Team Hub & Real-time Tracker</title>
+    <title>GSMS Team Hub & Tracker</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+
+    <!-- SUPABASE CLIENT INITIALIZATION -->
     <script>
         const SUPABASE_URL = 'https://dxzsgsjzbwdtbluorkxx.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4enNnc2p6YndkdGJsdW9ya3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzkwMjQsImV4cCI6MjEwMjIxNTAyNH0.ehJLFUA_M3Whyd7gBecn_yCXJHeqHuCNxRtRNxJYxI0';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     </script>
 
+    <!-- 1. AUTHENTICATION & BOOTSTRAPPING SCREEN -->
     <div id="authScreen" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl w-full max-w-md shadow-2xl">
-            <div class="text-center mb-6">
+        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
+            <div class="text-center">
                 <div class="inline-flex p-3 bg-blue-600/20 text-blue-400 rounded-xl mb-3">
                     <i data-lucide="shield-check" class="w-8 h-8"></i>
                 </div>
                 <h1 class="text-2xl font-bold text-white">GSMS Team Hub</h1>
-                <p id="authSubtitle" class="text-xs text-slate-400 mt-1">Ingiza Usajili wako na Neno la Siri ku-login</p>
+                <p class="text-xs text-slate-400 mt-1">Ingiza Usajili wako na Neno la Siri ku-login</p>
             </div>
 
-            <form id="loginForm" class="space-y-4">
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Registration No / Email</label>
                     <input type="text" id="loginIdentifier" required placeholder="TCC_PRG_XXXX au Email" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
@@ -34,21 +41,29 @@
                     <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
                     <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-lg shadow-blue-600/30">
+                <button type="submit" id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-lg shadow-blue-600/30">
                     Sign In
                 </button>
             </form>
 
-            <div id="bootstrapAdminBox" class="hidden mt-6 pt-6 border-t border-slate-700 text-center">
-                <p class="text-xs text-amber-400 mb-2">Mfumo hauna Admin. Jisajili kama Lead Admin wa kwanza:</p>
-                <button onclick="showAdminSetup()" class="text-xs bg-amber-600/20 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-lg hover:bg-amber-600/30 transition">
-                    Create First Admin
-                </button>
+            <!-- Admin Bootstrapping Setup (Inaonekana mara ya kwanza tu) -->
+            <div id="adminSetupBox" class="hidden pt-6 border-t border-slate-700">
+                <h3 class="text-xs font-bold text-amber-400 mb-2 text-center">Usajili wa Lead Admin wa Kwanza</h3>
+                <form onsubmit="handleAdminSetup(event)" class="space-y-3">
+                    <input type="text" id="adminName" placeholder="Jina Kamili la Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
+                    <input type="email" id="adminEmail" placeholder="Email ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
+                    <input type="password" id="adminPassword" placeholder="Password ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
+                    <button type="submit" id="adminBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 rounded text-xs transition">
+                        Tengeneza Lead Admin
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- 2. MAIN DASHBOARD PORTAL -->
     <div id="mainDashboard" class="hidden min-h-screen flex flex-col">
+        <!-- Header -->
         <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
             <div class="flex items-center gap-3">
                 <i data-lucide="layout-dashboard" class="text-blue-400"></i>
@@ -66,12 +81,14 @@
         </header>
 
         <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-8">
-            <section id="adminOnboardingPanel" class="hidden bg-slate-800 border border-blue-500/30 rounded-2xl p-6 shadow-xl">
+
+            <!-- ADMIN PANEL: MEMBER REGISTRATION -->
+            <section id="adminPanel" class="hidden bg-slate-800 border border-blue-500/30 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center gap-2 mb-4 text-blue-400">
                     <i data-lucide="user-plus"></i>
-                    <h3 class="font-bold text-white text-lg">Msajili Mjumbe Mpya (Admin Only)</h3>
+                    <h3 class="font-bold text-white text-lg">Msajili Mjumbe Mpya (Admin Panel)</h3>
                 </div>
-                <form id="addMemberForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <form onsubmit="handleMemberRegistration(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <input type="text" id="newFullName" required placeholder="Jina Kamili" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
                     <input type="email" id="newEmail" placeholder="Email (Si lazima)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
                     <select id="newModule" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
@@ -79,96 +96,158 @@
                         <option value="JS Form Validation">JS Form Validation</option>
                         <option value="QA & System Testing">QA & System Testing</option>
                         <option value="Docs & Data Entry">Docs & Data Entry</option>
-                        <option value="Core Backend Architecture">Core Backend Architecture</option>
+                        <option value="Backend Core Architecture">Backend Core Architecture</option>
                     </select>
                     <button type="submit" class="md:col-span-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-lg text-sm transition">
-                        Msajili Mjumbe (Atapata ID ya TCC_PRG_XXXX)
+                        Msajili Mjumbe (Random ID TCC_PRG_XXXX & Password 123456)
                     </button>
                 </form>
             </section>
 
+            <!-- SUBMIT WORK PROGRESS & MEDIA PROOF -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center gap-2 mb-4 text-emerald-400">
                     <i data-lucide="upload-cloud"></i>
-                    <h3 class="font-bold text-white text-lg">Tuma Progress ya Leo & Upload Media Proof</h3>
+                    <h3 class="font-bold text-white text-lg">Tuma Progress na Picha/Video Proof</h3>
                 </div>
-                <form id="submissionForm" class="space-y-4">
+                <form onsubmit="handleWorkSubmission(event)" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1">Percentage (% Completeness)</label>
                             <input type="number" id="subProgress" min="0" max="100" required placeholder="0 - 100" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">Upload Picha au Video (Proof)</label>
+                            <label class="block text-xs text-slate-400 mb-1">Upload Picha au Video Proof</label>
                             <input type="file" id="subMedia" accept="image/*,video/*" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">Maelezo ya Kazi / Changamoto</label>
-                        <textarea id="subNotes" rows="2" required placeholder="Eleza kwa ufupi ulichofanya na iwapo umekutana na changamoto..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"></textarea>
+                        <textarea id="subNotes" rows="2" required placeholder="Eleza kazi uliyofanya leo..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"></textarea>
                     </div>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2 rounded-lg text-sm transition">
-                        Save Work Submission
+                    <button type="submit" id="submitWorkBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2 rounded-lg text-sm transition">
+                        Hifadhi Progress
                     </button>
                 </form>
             </section>
 
+            <!-- REAL-TIME TEAM FEED -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-white text-lg flex items-center gap-2">
-                        <i data-lucide="activity" class="text-amber-400"></i> Real-time Team Activity Feed
-                    </h3>
-                    <span class="text-xs text-slate-400">Soma maendeleo ya wenzako</span>
-                </div>
+                <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                    <i data-lucide="activity" class="text-amber-400"></i> Real-time Team Feed (Read-Only)
+                </h3>
                 <div id="submissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </section>
 
+            <!-- REAL-TIME CHAT -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
                 <h3 class="font-bold text-white text-lg flex items-center gap-2">
                     <i data-lucide="message-square" class="text-cyan-400"></i> Live Team Inquiries & Chat
                 </h3>
                 <div id="chatBox" class="bg-slate-900 border border-slate-700 rounded-xl p-4 h-64 overflow-y-auto space-y-3"></div>
-                <form id="chatForm" class="flex gap-2">
-                    <input type="text" id="chatInput" required placeholder="Andika ujumbe au uliza swali hapa..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white">
-                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition">Send</button>
+                <form onsubmit="handleSendChat(event)" class="flex gap-2">
+                    <input type="text" id="chatInput" required placeholder="Andika swali au ujumbe..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white">
+                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
+                        Tuma
+                    </button>
                 </form>
             </section>
+
         </main>
     </div>
 
+    <!-- CORE JAVASCRIPT CONTROLLER -->
     <script>
+        // Init Icons
         lucide.createIcons();
-
         let currentUser = null;
 
-        async function init() {
-            const { data: admins } = await _supabase.from('profiles').select('*').eq('role', 'admin');
-            if (!admins || admins.length === 0) {
-                document.getElementById('bootstrapAdminBox').classList.remove('hidden');
+        // 1. App Startup Check
+        async function initApp() {
+            try {
+                const { data: admins, error } = await _supabase.from('profiles').select('*').eq('role', 'admin');
+                if (error) throw error;
+
+                if (!admins || admins.length === 0) {
+                    document.getElementById('adminSetupBox').classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Initialization Error:", err.message);
             }
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // 2. Handle First Admin Setup
+        async function handleAdminSetup(event) {
+            event.preventDefault();
+            const btn = document.getElementById('adminBtn');
+            btn.innerText = "Inasajili...";
+            btn.disabled = true;
+
+            const name = document.getElementById('adminName').value.trim();
+            const email = document.getElementById('adminEmail').value.trim();
+            const pass = document.getElementById('adminPassword').value.trim();
+
+            try {
+                const { data, error } = await _supabase.from('profiles').insert([{
+                    reg_no: 'TCC_ADMIN',
+                    full_name: name,
+                    email: email,
+                    password: pass,
+                    role: 'admin',
+                    module_assigned: 'Lead Admin Architecture'
+                }]).select();
+
+                if (error) throw error;
+
+                alert("🎉 Lead Admin amesajiliwa kikamilifu!\n\nIngia kwa:\nReg No / Email: " + email + "\nPassword: " + pass);
+                document.getElementById('adminSetupBox').classList.add('hidden');
+                document.getElementById('loginIdentifier').value = email;
+                document.getElementById('loginPassword').value = pass;
+
+            } catch (err) {
+                alert("Usajili Umefeli: " + err.message);
+            } finally {
+                btn.innerText = "Tengeneza Lead Admin";
+                btn.disabled = false;
+            }
+        }
+
+        // 3. Handle User Login
+        async function handleLogin(event) {
+            event.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.innerText = "Inaingia...";
+            btn.disabled = true;
+
             const id = document.getElementById('loginIdentifier').value.trim();
             const pass = document.getElementById('loginPassword').value.trim();
 
-            const { data, error } = await _supabase.from('profiles')
-                .select('*')
-                .or(`reg_no.eq.${id},email.eq.${id}`)
-                .eq('password', pass)
-                .single();
+            try {
+                const { data, error } = await _supabase.from('profiles')
+                    .select('*')
+                    .or(`reg_no.eq.${id},email.eq.${id}`)
+                    .eq('password', pass)
+                    .maybeSingle();
 
-            if (error || !data) {
-                alert('Login imefeli! Angalia Registration No / Email na Password yako.');
-                return;
+                if (error) throw error;
+                if (!data) {
+                    alert("Login imefeli! Angalia Registration No/Email au Password.");
+                    return;
+                }
+
+                currentUser = data;
+                renderDashboard();
+
+            } catch (err) {
+                alert("Hitilafu ya Login: " + err.message);
+            } finally {
+                btn.innerText = "Sign In";
+                btn.disabled = false;
             }
+        }
 
-            currentUser = data;
-            loadDashboard();
-        });
-
-        function loadDashboard() {
+        // 4. Render Dashboard View
+        function renderDashboard() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
 
@@ -176,7 +255,7 @@
             document.getElementById('userBadgeRole').innerText = currentUser.role === 'admin' ? 'Lead Admin' : `Module: ${currentUser.module_assigned}`;
 
             if (currentUser.role === 'admin') {
-                document.getElementById('adminOnboardingPanel').classList.remove('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
             }
 
             fetchSubmissions();
@@ -184,78 +263,98 @@
             subscribeRealtime();
         }
 
-        document.getElementById('addMemberForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('newFullName').value;
-            const email = document.getElementById('newEmail').value;
+        // 5. Handle Member Registration (Admin Only)
+        async function handleMemberRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('newFullName').value.trim();
+            const email = document.getElementById('newEmail').value.trim();
             const module = document.getElementById('newModule').value;
+            const randomReg = 'TCC_PRG_' + Math.floor(1000 + Math.random() * 9000);
 
-            const randomCode = 'TCC_PRG_' + Math.floor(1000 + Math.random() * 9000);
+            try {
+                const { error } = await _supabase.from('profiles').insert([{
+                    reg_no: randomReg,
+                    full_name: name,
+                    email: email,
+                    module_assigned: module,
+                    password: '123456',
+                    role: 'member'
+                }]);
 
-            const { error } = await _supabase.from('profiles').insert([{
-                reg_no: randomCode,
-                full_name: name,
-                email: email,
-                module_assigned: module,
-                password: '123456',
-                role: 'member'
-            }]);
+                if (error) throw error;
 
-            if (error) {
-                alert('Imeshindikana kusajili: ' + error.message);
-            } else {
-                alert(`Mjumbe amesajiliwa kikamilifu!\nRegistration No: ${randomCode}\nDefault Password: 123456`);
-                document.getElementById('addMemberForm').reset();
+                alert(`Mjumbe Amesajiliwa!\nID: ${randomReg}\nPassword: 123456`);
+                event.target.reset();
+
+            } catch (err) {
+                alert("Usajili Umefeli: " + err.message);
             }
-        });
+        }
 
-        document.getElementById('submissionForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // 6. Handle Progress Submission & Media Upload
+        async function handleWorkSubmission(event) {
+            event.preventDefault();
+            const btn = document.getElementById('submitWorkBtn');
+            btn.innerText = "Inahifadhi...";
+            btn.disabled = true;
+
             const pct = document.getElementById('subProgress').value;
             const notes = document.getElementById('subNotes').value;
             const mediaFile = document.getElementById('subMedia').files[0];
-
             let mediaUrl = null;
 
-            if (mediaFile) {
-                const fileExt = mediaFile.name.split('.').pop();
-                const filePath = `${currentUser.reg_no}_${Date.now()}.${fileExt}`;
-                const { error: uploadErr } = await _supabase.storage.from('gsms-media').upload(filePath, mediaFile);
+            try {
+                if (mediaFile) {
+                    const fileExt = mediaFile.name.split('.').pop();
+                    const filePath = `${currentUser.reg_no}_${Date.now()}.${fileExt}`;
+                    const { error: uploadErr } = await _supabase.storage.from('gsms-media').upload(filePath, mediaFile);
 
-                if (!uploadErr) {
+                    if (uploadErr) throw uploadErr;
+
                     const { data: urlData } = _supabase.storage.from('gsms-media').getPublicUrl(filePath);
                     mediaUrl = urlData.publicUrl;
                 }
+
+                const { error } = await _supabase.from('submissions').insert([{
+                    reg_no: currentUser.reg_no,
+                    full_name: currentUser.full_name,
+                    module: currentUser.module_assigned || 'Core Developer',
+                    progress_pct: pct,
+                    notes: notes,
+                    media_url: mediaUrl
+                }]);
+
+                if (error) throw error;
+
+                event.target.reset();
+                fetchSubmissions();
+
+            } catch (err) {
+                alert("Imeshindikana kupakia progress: " + err.message);
+            } finally {
+                btn.innerText = "Hifadhi Progress";
+                btn.disabled = false;
             }
+        }
 
-            await _supabase.from('submissions').insert([{
-                reg_no: currentUser.reg_no,
-                full_name: currentUser.full_name,
-                module: currentUser.module_assigned || 'Core Module',
-                progress_pct: pct,
-                notes: notes,
-                media_url: mediaUrl
-            }]);
-
-            document.getElementById('submissionForm').reset();
-            fetchSubmissions();
-        });
-
+        // 7. Fetch Submissions
         async function fetchSubmissions() {
-            const { data } = await _supabase.from('submissions').select('*').order('created_at', { ascending: false });
+            const { data, error } = await _supabase.from('submissions').select('*').order('created_at', { ascending: false });
+            if (error) return;
+
             const list = document.getElementById('submissionsList');
             list.innerHTML = '';
 
             data?.forEach(sub => {
                 const card = document.createElement('div');
                 card.className = "bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-3";
+                let mediaElement = '';
 
-                let mediaTag = '';
                 if (sub.media_url) {
                     if (sub.media_url.match(/\.(mp4|webm)$/i)) {
-                        mediaTag = `<video src="${sub.media_url}" controls class="w-full h-40 object-cover rounded-lg mt-2"></video>`;
+                        mediaElement = `<video src="${sub.media_url}" controls class="w-full h-40 object-cover rounded-lg mt-2"></video>`;
                     } else {
-                        mediaTag = `<img src="${sub.media_url}" class="w-full h-40 object-cover rounded-lg mt-2" />`;
+                        mediaElement = `<img src="${sub.media_url}" class="w-full h-40 object-cover rounded-lg mt-2" />`;
                     }
                 }
 
@@ -268,49 +367,31 @@
                         <span class="text-xs font-bold text-emerald-400 bg-emerald-950 px-2 py-1 rounded">${sub.progress_pct}%</span>
                     </div>
                     <p class="text-xs text-slate-300">${sub.notes}</p>
-                    ${mediaTag}
+                    ${mediaElement}
                 `;
                 list.appendChild(card);
             });
         }
 
-        document.getElementById('chatForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const msg = document.getElementById('chatInput').value;
-            await _supabase.from('messages').insert([{
-                sender_name: currentUser.full_name,
-                reg_no: currentUser.reg_no,
-                message: msg
-            }]);
-            document.getElementById('chatInput').value = '';
-        });
+        // 8. Live Chat System
+        async function handleSendChat(event) {
+            event.preventDefault();
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            try {
+                await _supabase.from('messages').insert([{
+                    sender_name: currentUser.full_name,
+                    reg_no: currentUser.reg_no,
+                    message: msg
+                }]);
+                input.value = '';
+                fetchChats();
+            } catch (err) {
+                console.error("Chat Error:", err.message);
+            }
+        }
 
         async function fetchChats() {
-            const { data } = await _supabase.from('messages').select('*').order('created_at', { ascending: true });
-            const box = document.getElementById('chatBox');
-            box.innerHTML = '';
-            data?.forEach(m => {
-                const div = document.createElement('div');
-                div.className = "text-xs space-y-0.5";
-                div.innerHTML = `<strong class="text-cyan-400">${m.sender_name} (${m.reg_no}):</strong> <span class="text-slate-200">${m.message}</span>`;
-                box.appendChild(div);
-            });
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function subscribeRealtime() {
-            _supabase.channel('public-changes')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchChats)
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, fetchSubmissions)
-                .subscribe();
-        }
-
-        function logout() {
-            currentUser = null;
-            location.reload();
-        }
-
-        init();
-    </script>
-</body>
-</html>
+ 
