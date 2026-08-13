@@ -28,7 +28,7 @@
                     <i data-lucide="shield-check" class="w-8 h-8"></i>
                 </div>
                 <h1 class="text-2xl font-bold text-white">GSMS Team Hub</h1>
-                <p class="text-xs text-slate-400 mt-1">Ingiza Usajili wako na Neno la Siri ku-login</p>
+                <p class="text-xs text-slate-400 mt-1">Ingia au Sajili Lead Admin Mpya</p>
             </div>
 
             <!-- Login Form -->
@@ -46,15 +46,22 @@
                 </button>
             </form>
 
-            <!-- Admin Bootstrapping Setup (Inaonekana mara ya kwanza tu ikiwa hakuna Admin) -->
-            <div id="adminSetupBox" class="hidden pt-6 border-t border-slate-700">
-                <h3 class="text-xs font-bold text-amber-400 mb-2 text-center">Usajili wa Lead Admin wa Kwanza</h3>
+            <!-- Toggle Button Kwa ajili ya Admin Registration -->
+            <div class="text-center pt-2">
+                <button type="button" onclick="toggleAdminSetup()" class="text-xs text-amber-400 hover:underline">
+                    👉 Hujajisajili? Bofya hapa kutengeneza Admin
+                </button>
+            </div>
+
+            <!-- Admin Setup Form -->
+            <div id="adminSetupBox" class="hidden pt-4 border-t border-slate-700">
+                <h3 class="text-xs font-bold text-amber-400 mb-2 text-center">Usajili wa Lead Admin Mpya</h3>
                 <form onsubmit="handleAdminSetup(event)" class="space-y-3">
                     <input type="text" id="adminName" placeholder="Jina Kamili la Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
                     <input type="email" id="adminEmail" placeholder="Email ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
                     <input type="password" id="adminPassword" placeholder="Password ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
                     <button type="submit" id="adminBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 rounded text-xs transition">
-                        Tengeneza Lead Admin
+                        Tengeneza Admin Sasa
                     </button>
                 </form>
             </div>
@@ -158,27 +165,15 @@
 
     <!-- CORE JAVASCRIPT CONTROLLER -->
     <script>
-        // Init Icons
         lucide.createIcons();
         let currentUser = null;
 
-        // 1. App Startup Check (Kagua kama kuna Admin)
-        async function initApp() {
-            try {
-                const { data: admins, error } = await _supabase.from('profiles').select('*').eq('role', 'admin');
-                if (error) throw error;
-
-                if (!admins || admins.length === 0) {
-                    document.getElementById('adminSetupBox').classList.remove('hidden');
-                } else {
-                    document.getElementById('adminSetupBox').classList.add('hidden');
-                }
-            } catch (err) {
-                console.error("Initialization Error:", err.message);
-            }
+        function toggleAdminSetup() {
+            const box = document.getElementById('adminSetupBox');
+            box.classList.toggle('hidden');
         }
 
-        // 2. Handle First Admin Setup
+        // Handle First Admin Setup
         async function handleAdminSetup(event) {
             event.preventDefault();
             const btn = document.getElementById('adminBtn');
@@ -196,12 +191,12 @@
                     email: email,
                     password: pass,
                     role: 'admin',
-                    module_assigned: 'Lead Admin Architecture'
+                    module_assigned: 'Lead Admin'
                 }]).select();
 
                 if (error) throw error;
 
-                alert("🎉 Lead Admin amesajiliwa kikamilifu!\n\nIngia kwa:\nReg No / Email: " + email + "\nPassword: " + pass);
+                alert("🎉 Admin amesajiliwa kikamilifu!\n\nIngia kwa:\nEmail: " + email + "\nPassword: " + pass);
                 document.getElementById('adminSetupBox').classList.add('hidden');
                 document.getElementById('loginIdentifier').value = email;
                 document.getElementById('loginPassword').value = pass;
@@ -209,12 +204,12 @@
             } catch (err) {
                 alert("Usajili Umefeli: " + err.message);
             } finally {
-                btn.innerText = "Tengeneza Lead Admin";
+                btn.innerText = "Tengeneza Admin Sasa";
                 btn.disabled = false;
             }
         }
 
-        // 3. Handle User Login (Inazuia Data za Uongo)
+        // Handle User Login
         async function handleLogin(event) {
             event.preventDefault();
             const btn = document.getElementById('loginBtn');
@@ -232,9 +227,8 @@
 
                 if (error) throw error;
 
-                // Kama hakuna mtumiaji aliyepatikana (Taarifa za uongo)
                 if (!data || data.length === 0) {
-                    alert("❌ Taarifa si sahihi! Angalia Registration No/Email au Password yako.");
+                    alert("❌ Taarifa si sahihi! Angalia ID/Email au Password yako.");
                     return;
                 }
 
@@ -250,7 +244,6 @@
             }
         }
 
-        // 4. Render Dashboard View
         function renderDashboard() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
@@ -267,7 +260,6 @@
             subscribeRealtime();
         }
 
-        // 5. Handle Member Registration (Admin Only)
         async function handleMemberRegistration(event) {
             event.preventDefault();
             const name = document.getElementById('newFullName').value.trim();
@@ -287,7 +279,7 @@
 
                 if (error) throw error;
 
-                alert(`🎉 Mjumbe Amesajiliwa Kikamilifu!\n\nID: ${randomReg}\nPassword: 123456`);
+                alert(`🎉 Mjumbe Amesajiliwa!\n\nID: ${randomReg}\nPassword: 123456`);
                 event.target.reset();
 
             } catch (err) {
@@ -295,7 +287,6 @@
             }
         }
 
-        // 6. Handle Progress Submission & Media Upload
         async function handleWorkSubmission(event) {
             event.preventDefault();
             const btn = document.getElementById('submitWorkBtn');
@@ -341,7 +332,6 @@
             }
         }
 
-        // 7. Fetch Submissions
         async function fetchSubmissions() {
             const { data, error } = await _supabase.from('submissions').select('*').order('created_at', { ascending: false });
             if (error) return;
@@ -377,7 +367,6 @@
             });
         }
 
-        // 8. Live Chat System
         async function handleSendChat(event) {
             event.preventDefault();
             const input = document.getElementById('chatInput');
@@ -386,4 +375,22 @@
 
             try {
                 await _supabase.from('messages').insert([{
-                    sender_name: currentUse
+                    sender_name: currentUser.full_name,
+                    reg_no: currentUser.reg_no,
+                    message: msg
+                }]);
+                input.value = '';
+                fetchChats();
+            } catch (err) {
+                console.error("Chat Error:", err.message);
+            }
+        }
+
+        async function fetchChats() {
+            const { data, error } = await _supabase.from('messages').select('*').order('created_at', { ascending: true });
+            if (error) return;
+
+            const box = document.getElementById('chatBox');
+            box.innerHTML = '';
+            data?.forEach(m => {
+               
