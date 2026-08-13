@@ -7,9 +7,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class' }
     </script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -23,11 +21,11 @@
 
     <script>
         const SUPABASE_URL = 'https://dxzsgsjzbwdtbluorkxx.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4enNnc2p6YndkdGJsdW9ya3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzkwMjQsImV4cCI6MjEwMjIxNTAyNH0.ehJLFUA_M3Whyd7gBecn_yCXJHeqHuCNxRtRNxJYxI0';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4enNnc2p6YndkdGJsdW9ya3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzkwMjQsImV4cCI6BtO2IxNTAyNH0.ehJLFUA_M3Whyd7gBecn_yCXJHeqHuCNxRtRNxJYxI0';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     </script>
 
-    <!-- TOP GLOBAL BAR (THEME & LANGUAGE TOGGLERS) -->
+    <!-- TOP GLOBAL BAR -->
     <div class="bg-slate-200 dark:bg-slate-800 border-b border-slate-300 dark:border-slate-700 px-4 py-2 flex justify-between items-center text-xs">
         <div class="flex items-center gap-2">
             <i data-lucide="globe" class="w-4 h-4 text-blue-500"></i>
@@ -84,7 +82,6 @@
                     Tengeneza Lead Admin
                 </button>
             </form>
-
         </div>
     </div>
 
@@ -110,7 +107,7 @@
             
             <!-- ADMIN MANAGEMENT PANEL -->
             <section id="adminPanel" class="hidden space-y-6">
-                <!-- Export Reports Controls -->
+                <!-- Export Controls -->
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm">
                     <div>
                         <h4 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="exportTitle">Ripoti & Export Data</h4>
@@ -143,12 +140,12 @@
                             <option value="Backend Core Architecture">Backend Core Architecture</option>
                         </select>
                         <button type="submit" class="md:col-span-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-lg text-sm transition" data-i18n="registerBtn">
-                            Msajili Mjumbe (Random ID TCC_PRG_XXXX & Password 123456)
+                            Msajili Mjumbe
                         </button>
                     </form>
                 </div>
 
-                <!-- Password Reset Requests Queue -->
+                <!-- Reset Requests -->
                 <div class="bg-white dark:bg-slate-800 border border-amber-500/30 rounded-2xl p-6 shadow-md space-y-4">
                     <div class="flex items-center gap-2 text-amber-500">
                         <i data-lucide="key-round"></i>
@@ -159,17 +156,17 @@
                     </div>
                 </div>
 
-                <!-- Manage Members List -->
+                <!-- Manage Members Table -->
                 <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-md space-y-4">
                     <div class="flex items-center gap-2 text-cyan-500">
                         <i data-lucide="users"></i>
-                        <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="membersList">Orodha ya Wajumbe wote & Actions</h3>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="membersList">Usimamizi wa Wajumbe (Edit & Delete)</h3>
                     </div>
                     <div id="membersListTable" class="overflow-x-auto"></div>
                 </div>
             </section>
 
-            <!-- LIVE CODE EDITOR / PLAYGROUND -->
+            <!-- LIVE CODE EDITOR -->
             <section class="bg-white dark:bg-slate-800 border border-cyan-500/30 rounded-2xl p-6 shadow-md space-y-4">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2 text-cyan-500">
@@ -183,7 +180,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="codeLabel">Andika HTML / CSS / JS Code Hapa:</label>
-                        <textarea id="codeSource" rows="8" class="w-full bg-slate-900 font-mono border border-slate-700 rounded-xl p-3 text-xs text-emerald-400 focus:outline-none focus:border-cyan-500" placeholder="<!-- Andika kodi yako hapa -->&#10;<h1 style='color: cyan;'>Hello GSMS Team!</h1>"></textarea>
+                        <textarea id="codeSource" rows="8" class="w-full bg-slate-900 font-mono border border-slate-700 rounded-xl p-3 text-xs text-emerald-400 focus:outline-none focus:border-cyan-500" placeholder="<h1 style='color: cyan;'>Hello GSMS Team!</h1>"></textarea>
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="previewLabel">Live Preview Output:</label>
@@ -194,7 +191,7 @@
                 </div>
             </section>
 
-            <!-- SUBMIT WORK PROGRESS & MEDIA PROOF -->
+            <!-- SUBMIT WORK PROGRESS -->
             <section class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-md">
                 <div class="flex items-center gap-2 mb-4 text-emerald-500">
                     <i data-lucide="upload-cloud"></i>
@@ -245,65 +242,74 @@
         </main>
     </div>
 
-    <!-- JS LOGIC CONTROLLER -->
+    <!-- EDIT MEMBER MODAL -->
+    <div id="editMemberModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white">Edit Mjumbe</h3>
+            <form onsubmit="saveMemberEdit(event)" class="space-y-3">
+                <input type="hidden" id="editRegNo">
+                <div>
+                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Jina Kamili</label>
+                    <input type="text" id="editFullName" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Email</label>
+                    <input type="email" id="editEmail" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Module Assigned</label>
+                    <select id="editModule" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+                        <option value="UI/UX & Tailwind Layouts">UI/UX & Tailwind Layouts</option>
+                        <option value="JS Form Validation">JS Form Validation</option>
+                        <option value="QA & System Testing">QA & System Testing</option>
+                        <option value="Docs & Data Entry">Docs & Data Entry</option>
+                        <option value="Backend Core Architecture">Backend Core Architecture</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Password</label>
+                    <input type="text" id="editPassword" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-mono">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeEditModal()" class="bg-slate-300 dark:bg-slate-700 px-4 py-2 rounded-lg text-xs font-medium">Ghairi</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-medium">Hifadhi Mabadiliko</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS LOGIC -->
     <script>
         lucide.createIcons();
         let currentUser = null;
         let currentLang = 'sw';
 
-        // DICTIONARY FOR MULTI-LANGUAGE
         const i18n = {
             sw: {
                 subtitle: "Mfumo wa Usimamizi na Progress ya Timu",
-                userLogin: "Login Ya Watumiaji",
-                signIn: "Sign In",
-                forgotPass: "Umesahau Password?",
-                adminSetup: "Usajili Wa Lead Admin Mpya",
-                createAdmin: "Tengeneza Lead Admin",
-                logout: "Logout",
-                exportTitle: "Ripoti & Export Data",
-                exportSub: "Pakua orodha ya wajumbe na kazi zao kwa CSV au PDF",
-                registerMember: "Msajili Mjumbe Mpya (Admin Only)",
-                registerBtn: "Msajili Mjumbe (Random ID & Password 123456)",
-                resetRequests: "Maombi ya Password Reset",
-                membersList: "Orodha ya Wajumbe wote & Actions",
-                codeEditorTitle: "GSMS Live Code Editor & Runner",
-                codeLabel: "Andika HTML / CSS / JS Code Hapa:",
-                previewLabel: "Live Preview Output:",
-                submitProgress: "Tuma Progress na Picha/Video Proof",
-                percentage: "Percentage (% Completeness)",
-                uploadMedia: "Upload Picha au Video Proof",
-                notes: "Maelezo ya Kazi / Changamoto",
-                saveProgress: "Hifadhi Progress",
-                feedTitle: "Real-time Team Feed (Kazi za Wajumbe)",
-                chatTitle: "Live Team Inquiries & Chat",
-                send: "Tuma"
+                userLogin: "Login Ya Watumiaji", signIn: "Sign In", forgotPass: "Umesahau Password?",
+                adminSetup: "Usajili Wa Lead Admin Mpya", createAdmin: "Tengeneza Lead Admin", logout: "Logout",
+                exportTitle: "Ripoti & Export Data", exportSub: "Pakua orodha ya wajumbe na kazi zao kwa CSV au PDF",
+                registerMember: "Msajili Mjumbe Mpya (Admin Only)", registerBtn: "Msajili Mjumbe",
+                resetRequests: "Maombi ya Password Reset", membersList: "Usimamizi wa Wajumbe (Edit & Delete)",
+                codeEditorTitle: "GSMS Live Code Editor & Runner", codeLabel: "Andika HTML / CSS / JS Code Hapa:",
+                previewLabel: "Live Preview Output:", submitProgress: "Tuma Progress na Picha/Video Proof",
+                percentage: "Percentage (% Completeness)", uploadMedia: "Upload Picha au Video Proof",
+                notes: "Maelezo ya Kazi / Changamoto", saveProgress: "Hifadhi Progress",
+                feedTitle: "Real-time Team Feed (Kazi za Wajumbe)", chatTitle: "Live Team Inquiries & Chat", send: "Tuma"
             },
             en: {
                 subtitle: "Team Operations & Progress Tracking System",
-                userLogin: "User Authentication",
-                signIn: "Sign In",
-                forgotPass: "Forgot Password?",
-                adminSetup: "New Lead Admin Registration",
-                createAdmin: "Create Lead Admin",
-                logout: "Logout",
-                exportTitle: "Reports & Data Export",
-                exportSub: "Download members list and progress logs via CSV or PDF",
-                registerMember: "Register New Member (Admin Only)",
-                registerBtn: "Register Member (Random ID & Default Password 123456)",
-                resetRequests: "Password Reset Requests",
-                membersList: "All Registered Members & Actions",
-                codeEditorTitle: "GSMS Live Code Editor & Sandbox",
-                codeLabel: "Write HTML / CSS / JS Code Here:",
-                previewLabel: "Live Output Preview:",
-                submitProgress: "Submit Progress & Media Proof",
-                percentage: "Percentage (% Completeness)",
-                uploadMedia: "Upload Image or Video Proof",
-                notes: "Task Description / Challenges",
-                saveProgress: "Submit Progress",
-                feedTitle: "Real-time Team Activity Feed",
-                chatTitle: "Live Team Inquiries & Discussions",
-                send: "Send"
+                userLogin: "User Authentication", signIn: "Sign In", forgotPass: "Forgot Password?",
+                adminSetup: "New Lead Admin Registration", createAdmin: "Create Lead Admin", logout: "Logout",
+                exportTitle: "Reports & Data Export", exportSub: "Download members list and progress logs via CSV or PDF",
+                registerMember: "Register New Member (Admin Only)", registerBtn: "Register Member",
+                resetRequests: "Password Reset Requests", membersList: "Members Management (Edit & Delete)",
+                codeEditorTitle: "GSMS Live Code Editor & Sandbox", codeLabel: "Write HTML / CSS / JS Code Here:",
+                previewLabel: "Live Output Preview:", submitProgress: "Submit Progress & Media Proof",
+                percentage: "Percentage (% Completeness)", uploadMedia: "Upload Image or Video Proof",
+                notes: "Task Description / Challenges", saveProgress: "Submit Progress",
+                feedTitle: "Real-time Team Activity Feed", chatTitle: "Live Team Inquiries & Discussions", send: "Send"
             }
         };
 
@@ -311,13 +317,10 @@
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(elem => {
                 const key = elem.getAttribute('data-i18n');
-                if (i18n[lang][key]) {
-                    elem.innerText = i18n[lang][key];
-                }
+                if (i18n[lang][key]) elem.innerText = i18n[lang][key];
             });
         }
 
-        // DARK / LIGHT THEME TOGGLE
         function toggleTheme() {
             const html = document.documentElement;
             const btnText = document.getElementById('themeBtnText');
@@ -329,167 +332,88 @@
                 btnText.innerText = "Dark Mode";
             }
         }
-
-        // CHECK IF ADMIN EXISTS ON INIT
         async function checkAdminStatus() {
             try {
                 const { data } = await _supabase.from('profiles').select('id').eq('role', 'admin');
                 if (!data || data.length === 0) {
                     document.getElementById('adminForm').classList.remove('hidden');
                 }
-            } catch (err) {
-                console.error("Error checking admin:", err);
-            }
+            } catch (err) { console.error(err); }
         }
         checkAdminStatus();
 
-        // CODE RUNNER
         function runCode() {
             const src = document.getElementById('codeSource').value;
             const iframe = document.getElementById('codePreview');
             const doc = iframe.contentDocument || iframe.contentWindow.document;
-            doc.open();
-            doc.write(src);
-            doc.close();
+            doc.open(); doc.write(src); doc.close();
         }
 
-        // EXPORT TO CSV
         async function exportCSV() {
             const { data: profiles } = await _supabase.from('profiles').select('*');
-            if (!profiles || profiles.length === 0) return alert("Hakuna taarifa za kutosha ku-export!");
-
-            let csvContent = "data:text/csv;charset=utf-8,Reg No,Name,Email,Module,Role\n";
-            profiles.forEach(p => {
-                csvContent += `${p.reg_no},${p.full_name},${p.email || 'N/A'},${p.module_assigned || 'N/A'},${p.role}\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
+            if (!profiles || profiles.length === 0) return alert("Hakuna data!");
+            let csv = "Reg No,Name,Email,Module,Role\n";
+            profiles.forEach(p => csv += `${p.reg_no},${p.full_name},${p.email || 'N/A'},${p.module_assigned || 'N/A'},${p.role}\n`);
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "GSMS_Team_Members.csv");
-            document.body.appendChild(link);
+            link.href = encodeURI("data:text/csv;charset=utf-8," + csv);
+            link.download = "GSMS_Members.csv";
             link.click();
-            document.body.removeChild(link);
         }
 
-        // EXPORT TO PDF
         async function exportPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
             const { data: profiles } = await _supabase.from('profiles').select('*');
-            if (!profiles || profiles.length === 0) return alert("Hakuna taarifa za kutosha ku-export!");
-
-            doc.setFontSize(16);
-            doc.text("GSMS Team Hub - Orodha ya Wajumbe", 14, 15);
-
-            const tableRows = profiles.map(p => [
-                p.reg_no,
-                p.full_name,
-                p.email || 'N/A',
-                p.module_assigned || 'N/A',
-                p.role
-            ]);
-
+            if (!profiles) return alert("Hakuna data!");
+            doc.text("GSMS Team Report", 14, 15);
             doc.autoTable({
-                head: [['Reg No', 'Jina Kamili', 'Email', 'Module', 'Role']],
-                body: tableRows,
-                startY: 25,
+                head: [['Reg No', 'Jina', 'Email', 'Module', 'Role']],
+                body: profiles.map(p => [p.reg_no, p.full_name, p.email || 'N/A', p.module_assigned || 'N/A', p.role]),
+                startY: 25
             });
-
-            doc.save("GSMS_Team_Report.pdf");
+            doc.save("GSMS_Report.pdf");
         }
 
-        // LOGIN
         async function handleLogin(event) {
             event.preventDefault();
-            const btn = document.getElementById('loginBtn');
-            btn.innerText = "Inaingia...";
-            btn.disabled = true;
-
             const id = document.getElementById('loginIdentifier').value.trim();
             const pass = document.getElementById('loginPassword').value.trim();
-
             try {
-                const { data, error } = await _supabase.from('profiles')
-                    .select('*')
-                    .or(`reg_no.eq.${id},email.eq.${id}`)
-                    .eq('password', pass);
-
+                const { data, error } = await _supabase.from('profiles').select('*').or(`reg_no.eq.${id},email.eq.${id}`).eq('password', pass);
                 if (error) throw error;
-
-                if (!data || data.length === 0) {
-                    alert("❌ Taarifa si sahihi! Angalia ID/Email au Password yako.");
-                    return;
-                }
-
+                if (!data || data.length === 0) return alert("❌ Login imefeli! Angalia taarifa zako.");
                 currentUser = data[0];
-                alert(`✅ Karibu tena, ${currentUser.full_name}!`);
                 renderDashboard();
-
-            } catch (err) {
-                alert("Hitilafu wakati wa Login: " + err.message);
-            } finally {
-                btn.innerText = i18n[currentLang].signIn;
-                btn.disabled = false;
-            }
+            } catch (err) { alert("Error: " + err.message); }
         }
-         // FORGOT PASSWORD REQUEST
+
         async function requestPasswordReset() {
-            const regOrEmail = prompt("Tafadhali ingiza Registration Number au Email yako:");
-            if (!regOrEmail) return;
-
+            const id = prompt("Ingiza Reg No au Email yako:");
+            if (!id) return;
             try {
-                const { error } = await _supabase.from('reset_requests').insert([{
-                    identifier: regOrEmail.trim(),
-                    status: 'pending'
-                }]);
-
+                const { error } = await _supabase.from('reset_requests').insert([{ identifier: id.trim(), status: 'pending' }]);
                 if (error) throw error;
-                alert("✅ Ombi lako la password reset limetumwa kwa Admin! Akilipitisha, password yako itakuwa: 123456");
-            } catch (err) {
-                alert("Ombi limeshindikana: " + err.message);
-            }
+                alert("✅ Ombi limetumwa kwa Admin!");
+            } catch (err) { alert("Hitilafu: " + err.message); }
         }
 
-        // SETUP ADMIN
         async function handleAdminSetup(event) {
             event.preventDefault();
-            const btn = document.getElementById('adminBtn');
-            btn.innerText = "Inasajili...";
-            btn.disabled = true;
-
-            const name = document.getElementById('adminName').value.trim();
-            const email = document.getElementById('adminEmail').value.trim();
-            const pass = document.getElementById('adminPassword').value.trim();
-
             try {
                 const { error } = await _supabase.from('profiles').insert([{
-                    reg_no: 'TCC_ADMIN',
-                    full_name: name,
-                    email: email,
-                    password: pass,
-                    role: 'admin',
-                    module_assigned: 'Lead Admin'
+                    reg_no: 'TCC_ADMIN', full_name: document.getElementById('adminName').value.trim(),
+                    email: document.getElementById('adminEmail').value.trim(),
+                    password: document.getElementById('adminPassword').value.trim(),
+                    role: 'admin', module_assigned: 'Lead Admin'
                 }]);
-
                 if (error) throw error;
-
-                alert("🎉 Lead Admin amesajiliwa kikamilifu!");
-                location.reload();
-
-            } catch (err) {
-                alert("Usajili Umefeli: " + err.message);
-            } finally {
-                btn.innerText = i18n[currentLang].createAdmin;
-                btn.disabled = false;
-            }
+                alert("🎉 Lead Admin amesajiliwa!"); location.reload();
+            } catch (err) { alert("Error: " + err.message); }
         }
 
         function renderDashboard() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
-
             document.getElementById('userNameDisplay').innerText = `${currentUser.full_name} (${currentUser.reg_no})`;
             document.getElementById('userBadgeRole').innerText = currentUser.role === 'admin' ? 'Lead Admin' : `Module: ${currentUser.module_assigned}`;
 
@@ -498,110 +422,117 @@
                 fetchResetRequests();
                 fetchAllMembers();
             }
-
             fetchSubmissions();
             fetchChats();
             subscribeRealtime();
             runCode();
         }
 
-        // ADMIN: FETCH RESET REQUESTS
         async function fetchResetRequests() {
-            const { data, error } = await _supabase.from('reset_requests').select('*').eq('status', 'pending');
-            if (error) return;
-
+            const { data } = await _supabase.from('reset_requests').select('*').eq('status', 'pending');
             const container = document.getElementById('resetRequestsList');
             if (!data || data.length === 0) {
                 container.innerHTML = `<p class="italic text-slate-400">Hakuna maombi ya reset kwa sasa.</p>`;
                 return;
             }
-
             container.innerHTML = '';
             data.forEach(req => {
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-slate-50 dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-700";
-                div.innerHTML = `
-                    <span>Ombi kutoka: <strong class="text-amber-500">${req.identifier}</strong></span>
-                    <button onclick="approveReset('${req.id}', '${req.identifier}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-xs">
-                        Approve & Reset (Set password: 123456)
-                    </button>
+                container.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-700">
+                        <span>Ombi kutoka: <strong class="text-amber-500">${req.identifier}</strong></span>
+                        <button onclick="approveReset('${req.id}', '${req.identifier}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-xs">
+                            Approve Reset (Pass: 123456)
+                        </button>
+                    </div>
                 `;
-                container.appendChild(div);
             });
         }
-        // ADMIN: APPROVE RESET
+
         async function approveReset(reqId, identifier) {
             try {
-                const { error: userErr } = await _supabase.from('profiles')
-                    .update({ password: '123456' })
-                    .or(`reg_no.eq.${identifier},email.eq.${identifier}`);
-
-                if (userErr) throw userErr;
-
+                await _supabase.from('profiles').update({ password: '123456' }).or(`reg_no.eq.${identifier},email.eq.${identifier}`);
                 await _supabase.from('reset_requests').update({ status: 'approved' }).eq('id', reqId);
-
-                alert("✅ Password imebadilishwa kuwa 123456 kikamilifu!");
+                alert("✅ Password imebadilishwa kuwa 123456!");
                 fetchResetRequests();
-            } catch (err) {
-                alert("Hitilafu: " + err.message);
-            }
+            } catch (err) { alert("Error: " + err.message); }
         }
 
-        // ADMIN: FETCH ALL MEMBERS
         async function fetchAllMembers() {
-            const { data, error } = await _supabase.from('profiles').select('*');
-            if (error) return;
-
+            const { data } = await _supabase.from('profiles').select('*');
             const tableBox = document.getElementById('membersListTable');
             let html = `
-                <table class="w-full text-xs text-left text-slate-700 dark:text-slate-300 border-collapse">
+                <table class="w-full text-xs text-left border-collapse">
                     <thead class="bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 uppercase">
                         <tr>
                             <th class="p-2 border border-slate-200 dark:border-slate-700">Reg No</th>
                             <th class="p-2 border border-slate-200 dark:border-slate-700">Jina</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Email</th>
                             <th class="p-2 border border-slate-200 dark:border-slate-700">Module</th>
-                            <th class="p-2 border border-slate-200 dark:border-slate-700">Role</th>
-                            <th class="p-2 border border-slate-200 dark:border-slate-700">Action</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Password</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
-
-            data.forEach(m => {
+            data?.forEach(m => {
                 html += `
                     <tr class="border-b border-slate-200 dark:border-slate-700">
                         <td class="p-2 font-mono text-blue-600 dark:text-blue-400">${m.reg_no}</td>
                         <td class="p-2 font-medium">${m.full_name}</td>
+                        <td class="p-2">${m.email || 'N/A'}</td>
                         <td class="p-2">${m.module_assigned || 'N/A'}</td>
-                        <td class="p-2 font-bold ${m.role === 'admin' ? 'text-amber-500' : 'text-slate-500'}">${m.role}</td>
-                        <td class="p-2 space-x-2">
-                            ${m.role !== 'admin' ? `
-                                <button onclick="deleteMember('${m.reg_no}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2 py-1 rounded">Delete</button>
-                            ` : '<span class="text-slate-400">Master</span>'}
+                        <td class="p-2 font-mono text-amber-500">${m.password}</td>
+                        <td class="p-2 space-x-1">
+                            <button onclick="openEditModal('${m.reg_no}', '${m.full_name}', '${m.email || ''}', '${m.module_assigned}', '${m.password}')" class="bg-amber-600 hover:bg-amber-500 text-white px-2 py-1 rounded">Edit</button>
+                            ${m.role !== 'admin' ? `<button onclick="deleteMember('${m.reg_no}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2 py-1 rounded">Delete</button>` : ''}
                         </td>
                     </tr>
                 `;
             });
-
             html += `</tbody></table>`;
             tableBox.innerHTML = html;
         }
 
-        // ADMIN: DELETE MEMBER
-        async function deleteMember(regNo) {
-            if (!confirm(`Je, una uhakika unataka kumfuta mjumbe ${regNo}?`)) return;
-
-            try {
-                const { error } = await _supabase.from('profiles').delete().eq('reg_no', regNo);
-                if (error) throw error;
-                alert(" Mjumbe amefutwa!");
-                fetchAllMembers();
-            } catch (err) {
-                alert("Imeshindikana kumfuta: " + err.message);
-            }
+        function openEditModal(regNo, name, email, module, password) {
+            document.getElementById('editRegNo').value = regNo;
+            document.getElementById('editFullName').value = name;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editModule').value = module;
+            document.getElementById('editPassword').value = password;
+            document.getElementById('editMemberModal').classList.remove('hidden');
         }
 
-        // MEMBER REGISTRATION
+        function closeEditModal() {
+            document.getElementById('editMemberModal').classList.add('hidden');
+        }
+
+        async function saveMemberEdit(event) {
+            event.preventDefault();
+            const regNo = document.getElementById('editRegNo').value;
+            try {
+                const { error } = await _supabase.from('profiles').update({
+                    full_name: document.getElementById('editFullName').value.trim(),
+                    email: document.getElementById('editEmail').value.trim(),
+                    module_assigned: document.getElementById('editModule').value,
+                    password: document.getElementById('editPassword').value.trim()
+                }).eq('reg_no', regNo);
+
+                if (error) throw error;
+                alert("✅ Taarifa zimebadilishwa!");
+                closeEditModal();
+                fetchAllMembers();
+            } catch (err) { alert("Hitilafu: " + err.message); }
+        }
+
+        async function deleteMember(regNo) {
+            if (!confirm(`Unataka kumfuta mjumbe ${regNo}?`)) return;
+            try {
+                await _supabase.from('profiles').delete().eq('reg_no', regNo);
+                alert("Mjumbe amefutwa!");
+                fetchAllMembers();
+            } catch (err) { alert("Hitilafu: " + err.message); }
+        }
+
         async function handleMemberRegistration(event) {
             event.preventDefault();
             const name = document.getElementById('newFullName').value.trim();
@@ -611,31 +542,17 @@
 
             try {
                 const { error } = await _supabase.from('profiles').insert([{
-                    reg_no: randomReg,
-                    full_name: name,
-                    email: email,
-                    module_assigned: module,
-                    password: '123456',
-                    role: 'member'
+                    reg_no: randomReg, full_name: name, email: email, module_assigned: module, password: '123456', role: 'member'
                 }]);
-
                 if (error) throw error;
-
-                alert(`🎉 Mjumbe Amesajiliwa!\n\nID: ${randomReg}\nPassword: 123456`);
+                alert(`🎉 Mjumbe Amesajiliwa!\nID: ${randomReg}\nPassword: 123456`);
                 event.target.reset();
                 fetchAllMembers();
-
-            } catch (err) {
-                alert("Usajili Umefeli: " + err.message);
-            }
+            } catch (err) { alert("Error: " + err.message); }
         }
-        // WORK SUBMISSION
+
         async function handleWorkSubmission(event) {
             event.preventDefault();
-            const btn = document.getElementById('submitWorkBtn');
-            btn.innerText = "Inahifadhi...";
-            btn.disabled = true;
-
             const pct = document.getElementById('subProgress').value;
             const notes = document.getElementById('subNotes').value;
             const mediaFile = document.getElementById('subMedia').files[0];
@@ -643,124 +560,74 @@
 
             try {
                 if (mediaFile) {
-                    const fileExt = mediaFile.name.split('.').pop();
-                    const filePath = `${currentUser.reg_no}_${Date.now()}.${fileExt}`;
-                    const { error: uploadErr } = await _supabase.storage.from('gsms-media').upload(filePath, mediaFile);
-
-                    if (uploadErr) throw uploadErr;
-
-                    const { data: urlData } = _supabase.storage.from('gsms-media').getPublicUrl(filePath);
-                    mediaUrl = urlData.publicUrl;
+                    const filePath = `${currentUser.reg_no}_${Date.now()}.${mediaFile.name.split('.').pop()}`;
+                    await _supabase.storage.from('gsms-media').upload(filePath, mediaFile);
+                    mediaUrl = _supabase.storage.from('gsms-media').getPublicUrl(filePath).data.publicUrl;
                 }
 
-                const { error } = await _supabase.from('submissions').insert([{
-                    reg_no: currentUser.reg_no,
-                    full_name: currentUser.full_name,
-                    module: currentUser.module_assigned || 'Core Developer',
-                    progress_pct: pct,
-                    notes: notes,
-                    media_url: mediaUrl
+                await _supabase.from('submissions').insert([{
+                    reg_no: currentUser.reg_no, full_name: currentUser.full_name,
+                    module: currentUser.module_assigned || 'Developer',
+                    progress_pct: pct, notes: notes, media_url: mediaUrl
                 }]);
-
-                if (error) throw error;
 
                 event.target.reset();
                 fetchSubmissions();
-
-            } catch (err) {
-                alert("Imeshindikana kupakia progress: " + err.message);
-            } finally {
-                btn.innerText = i18n[currentLang].saveProgress;
-                btn.disabled = false;
-            }
+            } catch (err) { alert("Error: " + err.message); }
         }
 
-        // FETCH SUBMISSIONS WITH PERMISSION CONTROL
         async function fetchSubmissions() {
-            const { data, error } = await _supabase.from('submissions').select('*').order('created_at', { ascending: false });
-            if (error) return;
-
+            const { data } = await _supabase.from('submissions').select('*').order('created_at', { ascending: false });
             const list = document.getElementById('submissionsList');
             list.innerHTML = '';
 
             data?.forEach(sub => {
                 const card = document.createElement('div');
                 card.className = "bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4 rounded-xl space-y-3 relative shadow-sm";
-                let mediaElement = '';
-
-                if (sub.media_url) {
-                    if (sub.media_url.match(/\.(mp4|webm)$/i)) {
-                        mediaElement = `<video src="${sub.media_url}" controls class="w-full h-40 object-cover rounded-lg mt-2"></video>`;
-                    } else {
-                        mediaElement = `<img src="${sub.media_url}" class="w-full h-40 object-cover rounded-lg mt-2" />`;
-                    }
-                }
-
+                let mediaElement = sub.media_url ? (sub.media_url.match(/\.(mp4|webm)$/i) ? `<video src="${sub.media_url}" controls class="w-full h-40 object-cover rounded-lg mt-2"></video>` : `<img src="${sub.media_url}" class="w-full h-40 object-cover rounded-lg mt-2" />`) : '';
+                
                 const canDelete = currentUser.role === 'admin' || currentUser.reg_no === sub.reg_no;
 
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
-                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">${sub.full_name} <span class="text-xs font-normal text-slate-500 dark:text-slate-400">(${sub.reg_no})</span></h4>
-                            <p class="text-xs text-blue-600 dark:text-blue-400">${sub.module}</p>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">${sub.full_name} <span class="text-xs text-slate-400">(${sub.reg_no})</span></h4>
+                            <p class="text-xs text-blue-500">${sub.module}</p>
                         </div>
-                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-1 rounded">${sub.progress_pct}%</span>
+                        <span class="text-xs font-bold text-emerald-500 bg-emerald-100 dark:bg-emerald-950 px-2 py-1 rounded">${sub.progress_pct}%</span>
                     </div>
                     <p class="text-xs text-slate-700 dark:text-slate-300">${sub.notes}</p>
                     ${mediaElement}
-                    ${canDelete ? `
-                        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-end">
-                            <button onclick="deleteSubmission('${sub.id}')" class="text-xs text-rose-500 hover:underline">Futa Kazi Hii</button>
-                        </div>
-                    ` : ''}
+                    ${canDelete ? `<div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-end"><button onclick="deleteSubmission('${sub.id}')" class="text-xs text-rose-500 hover:underline">Futa Kazi Hii</button></div>` : ''}
                 `;
                 list.appendChild(card);
             });
         }
 
-        // DELETE SUBMISSION
         async function deleteSubmission(id) {
             if (!confirm("Je, una uhakika unataka kufuta kazi hii?")) return;
             try {
-                const { error } = await _supabase.from('submissions').delete().eq('id', id);
-                if (error) throw error;
+                await _supabase.from('submissions').delete().eq('id', id);
                 fetchSubmissions();
-            } catch (err) {
-                alert("Imeshindikana kufuta: " + err.message);
-            }
-        }
-
-        // CHATS
+            } catch (err) { alert("Error: " + err.message); }
+                }
         async function handleSendChat(event) {
             event.preventDefault();
             const input = document.getElementById('chatInput');
-            const msg = input.value.trim();
-            if (!msg) return;
-
+            if (!input.value.trim()) return;
             try {
-                await _supabase.from('messages').insert([{
-                    sender_name: currentUser.full_name,
-                    reg_no: currentUser.reg_no,
-                    message: msg
-                }]);
+                await _supabase.from('messages').insert([{ sender_name: currentUser.full_name, reg_no: currentUser.reg_no, message: input.value.trim() }]);
                 input.value = '';
                 fetchChats();
-            } catch (err) {
-                console.error("Chat Error:", err.message);
-            }
+            } catch (err) { console.error(err); }
         }
 
         async function fetchChats() {
-            const { data, error } = await _supabase.from('messages').select('*').order('created_at', { ascending: true });
-            if (error) return;
-
+            const { data } = await _supabase.from('messages').select('*').order('created_at', { ascending: true });
             const box = document.getElementById('chatBox');
             box.innerHTML = '';
             data?.forEach(m => {
-                const div = document.createElement('div');
-                div.className = "text-xs space-y-0.5";
-                div.innerHTML = `<strong class="text-cyan-600 dark:text-cyan-400">${m.sender_name} (${m.reg_no}):</strong> <span class="text-slate-800 dark:text-slate-200">${m.message}</span>`;
-                box.appendChild(div);
+                box.innerHTML += `<div class="text-xs"><strong class="text-cyan-500">${m.sender_name} (${m.reg_no}):</strong> <span>${m.message}</span></div>`;
             });
             box.scrollTop = box.scrollHeight;
         }
@@ -773,9 +640,7 @@
                 .subscribe();
         }
 
-        function logout() {
-            location.reload();
-        }
+        function logout() { location.reload(); }
     </script>
 </body>
 </html>
