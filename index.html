@@ -46,7 +46,7 @@
                 </button>
             </form>
 
-            <!-- Admin Bootstrapping Setup (Inaonekana mara ya kwanza tu) -->
+            <!-- Admin Bootstrapping Setup (Inaonekana mara ya kwanza tu ikiwa hakuna Admin) -->
             <div id="adminSetupBox" class="hidden pt-6 border-t border-slate-700">
                 <h3 class="text-xs font-bold text-amber-400 mb-2 text-center">Usajili wa Lead Admin wa Kwanza</h3>
                 <form onsubmit="handleAdminSetup(event)" class="space-y-3">
@@ -134,7 +134,7 @@
             <!-- REAL-TIME TEAM FEED -->
             <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
                 <h3 class="font-bold text-white text-lg flex items-center gap-2">
-                    <i data-lucide="activity" class="text-amber-400"></i> Real-time Team Feed (Read-Only)
+                    <i data-lucide="activity" class="text-amber-400"></i> Real-time Team Feed
                 </h3>
                 <div id="submissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </section>
@@ -162,7 +162,7 @@
         lucide.createIcons();
         let currentUser = null;
 
-        // 1. App Startup Check
+        // 1. App Startup Check (Kagua kama kuna Admin)
         async function initApp() {
             try {
                 const { data: admins, error } = await _supabase.from('profiles').select('*').eq('role', 'admin');
@@ -170,6 +170,8 @@
 
                 if (!admins || admins.length === 0) {
                     document.getElementById('adminSetupBox').classList.remove('hidden');
+                } else {
+                    document.getElementById('adminSetupBox').classList.add('hidden');
                 }
             } catch (err) {
                 console.error("Initialization Error:", err.message);
@@ -212,7 +214,7 @@
             }
         }
 
-        // 3. Handle User Login
+        // 3. Handle User Login (Inazuia Data za Uongo)
         async function handleLogin(event) {
             event.preventDefault();
             const btn = document.getElementById('loginBtn');
@@ -226,20 +228,22 @@
                 const { data, error } = await _supabase.from('profiles')
                     .select('*')
                     .or(`reg_no.eq.${id},email.eq.${id}`)
-                    .eq('password', pass)
-                    .maybeSingle();
+                    .eq('password', pass);
 
                 if (error) throw error;
-                if (!data) {
-                    alert("Login imefeli! Angalia Registration No/Email au Password.");
+
+                // Kama hakuna mtumiaji aliyepatikana (Taarifa za uongo)
+                if (!data || data.length === 0) {
+                    alert("❌ Taarifa si sahihi! Angalia Registration No/Email au Password yako.");
                     return;
                 }
 
-                currentUser = data;
+                currentUser = data[0];
+                alert(`✅ Karibu tena, ${currentUser.full_name}!`);
                 renderDashboard();
 
             } catch (err) {
-                alert("Hitilafu ya Login: " + err.message);
+                alert("Hitilafu wakati wa Login: " + err.message);
             } finally {
                 btn.innerText = "Sign In";
                 btn.disabled = false;
@@ -283,7 +287,7 @@
 
                 if (error) throw error;
 
-                alert(`Mjumbe Amesajiliwa!\nID: ${randomReg}\nPassword: 123456`);
+                alert(`🎉 Mjumbe Amesajiliwa Kikamilifu!\n\nID: ${randomReg}\nPassword: 123456`);
                 event.target.reset();
 
             } catch (err) {
@@ -382,16 +386,4 @@
 
             try {
                 await _supabase.from('messages').insert([{
-                    sender_name: currentUser.full_name,
-                    reg_no: currentUser.reg_no,
-                    message: msg
-                }]);
-                input.value = '';
-                fetchChats();
-            } catch (err) {
-                console.error("Chat Error:", err.message);
-            }
-        }
-
-        async function fetchChats() {
- 
+                    sender_name: currentUse
