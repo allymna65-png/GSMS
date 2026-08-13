@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="sw" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSMS Team Hub & Tracker</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- jsPDF for PDF Exporting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors duration-200">
 
     <script>
         const SUPABASE_URL = 'https://dxzsgsjzbwdtbluorkxx.supabase.co';
@@ -16,42 +27,60 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     </script>
 
-    <!-- AUTHENTICATION SCREEN -->
-    <div id="authScreen" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-slate-800 border border-slate-700 p-6 sm:p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
+    <!-- TOP GLOBAL BAR (THEME & LANGUAGE TOGGLERS) -->
+    <div class="bg-slate-200 dark:bg-slate-800 border-b border-slate-300 dark:border-slate-700 px-4 py-2 flex justify-between items-center text-xs">
+        <div class="flex items-center gap-2">
+            <i data-lucide="globe" class="w-4 h-4 text-blue-500"></i>
+            <select id="langSelect" onchange="switchLanguage(this.value)" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs focus:outline-none">
+                <option value="sw">Swahili</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <button onclick="toggleTheme()" class="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 px-3 py-1 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+            <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block text-amber-400"></i>
+            <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden text-amber-500"></i>
+            <span id="themeBtnText" class="font-medium">Dark Mode</span>
+        </button>
+    </div>
+
+    <!-- 1. AUTHENTICATION SCREEN -->
+    <div id="authScreen" class="flex items-center justify-center min-h-[calc(100vh-40px)] p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 sm:p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
             
-            <!-- HEADER -->
             <div class="text-center">
-                <div class="inline-flex p-3 bg-blue-600/20 text-blue-400 rounded-xl mb-2">
+                <div class="inline-flex p-3 bg-blue-600/10 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 rounded-xl mb-2">
                     <i data-lucide="shield-check" class="w-8 h-8"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-white">GSMS Team Hub</h1>
-                <p class="text-xs text-slate-400 mt-1">Ingia au Usajili Lead Admin Mpya</p>
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">GSMS Team Hub</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" data-i18n="subtitle">Mfumo wa Usimamizi na Progress ya Timu</p>
             </div>
 
             <!-- LOGIN FORM -->
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
-                <h2 class="text-xs font-bold text-blue-400 uppercase tracking-wider">1. Login Ya Watumiaji</h2>
+                <h2 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider" data-i18n="userLogin">Login Ya Watumiaji</h2>
                 <div>
-                    <input type="text" id="loginIdentifier" required placeholder="Reg No / Email" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <input type="text" id="loginIdentifier" required placeholder="Reg No au Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
-                    <input type="password" id="loginPassword" required placeholder="Password" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <input type="password" id="loginPassword" required placeholder="Password" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
                 </div>
-                <button type="submit" id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 rounded-lg text-sm transition">
+                <button type="submit" id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 rounded-lg text-sm transition shadow-lg shadow-blue-600/30" data-i18n="signIn">
                     Sign In
                 </button>
+                <div class="text-right">
+                    <button type="button" onclick="requestPasswordReset()" class="text-xs text-rose-500 dark:text-rose-400 hover:underline" data-i18n="forgotPass">
+                        Umesahau Password?
+                    </button>
+                </div>
             </form>
 
-            <hr class="border-slate-700">
-
-            <!-- ADMIN REGISTRATION FORM (IPO WAZI MOJA KWA MOJA) -->
-            <form id="adminForm" onsubmit="handleAdminSetup(event)" class="space-y-3">
-                <h2 class="text-xs font-bold text-amber-400 uppercase tracking-wider">2. Usajili Wa Lead Admin Mpya</h2>
-                <input type="text" id="adminName" placeholder="Jina Kamili la Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
-                <input type="email" id="adminEmail" placeholder="Email ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
-                <input type="password" id="adminPassword" placeholder="Password ya Admin" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white">
-                <button type="submit" id="adminBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 rounded text-xs transition">
+            <!-- ADMIN REGISTRATION FORM -->
+            <form id="adminForm" onsubmit="handleAdminSetup(event)" class="hidden space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                <h2 class="text-xs font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wider" data-i18n="adminSetup">Usajili Wa Lead Admin Mpya</h2>
+                <input type="text" id="adminName" placeholder="Jina Kamili la Admin" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-xs">
+                <input type="email" id="adminEmail" placeholder="Email ya Admin" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-xs">
+                <input type="password" id="adminPassword" placeholder="Password ya Admin" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-xs">
+                <button type="submit" id="adminBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 rounded text-xs transition" data-i18n="createAdmin">
                     Tengeneza Lead Admin
                 </button>
             </form>
@@ -59,87 +88,156 @@
         </div>
     </div>
 
-    <!-- MAIN DASHBOARD PORTAL -->
+    <!-- 2. MAIN DASHBOARD PORTAL -->
     <div id="mainDashboard" class="hidden min-h-screen flex flex-col">
-        <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-4 sm:px-6 py-4 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-50 shadow-sm">
             <div class="flex items-center gap-3">
-                <i data-lucide="layout-dashboard" class="text-blue-400"></i>
+                <i data-lucide="layout-dashboard" class="text-blue-500"></i>
                 <div>
-                    <h2 class="font-bold text-white text-base">GSMS Portal</h2>
-                    <p class="text-xs text-slate-400" id="userBadgeRole">Loading...</p>
+                    <h2 class="font-bold text-slate-900 dark:text-white text-base">GSMS Portal</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400" id="userBadgeRole">Loading...</p>
                 </div>
             </div>
             <div class="flex items-center gap-4">
-                <span id="userNameDisplay" class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-800 px-3 py-1 rounded-full"></span>
-                <button onclick="logout()" class="text-xs text-slate-400 hover:text-rose-400 transition flex items-center gap-1">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                <span id="userNameDisplay" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800 px-3 py-1 rounded-full"></span>
+                <button onclick="logout()" class="text-xs text-slate-500 dark:text-slate-400 hover:text-rose-500 transition flex items-center gap-1 font-medium">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> <span data-i18n="logout">Logout</span>
                 </button>
             </div>
         </header>
 
         <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-8">
-            <section id="adminPanel" class="hidden bg-slate-800 border border-blue-500/30 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center gap-2 mb-4 text-blue-400">
-                    <i data-lucide="user-plus"></i>
-                    <h3 class="font-bold text-white text-lg">Msajili Mjumbe Mpya (Admin Panel)</h3>
+            
+            <!-- ADMIN MANAGEMENT PANEL -->
+            <section id="adminPanel" class="hidden space-y-6">
+                <!-- Export Reports Controls -->
+                <div class="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm">
+                    <div>
+                        <h4 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="exportTitle">Ripoti & Export Data</h4>
+                        <p class="text-xs text-slate-500" data-i18n="exportSub">Pakua orodha ya wajumbe na kazi zao kwa CSV au PDF</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Export CSV
+                        </button>
+                        <button onclick="exportPDF()" class="bg-rose-600 hover:bg-rose-500 text-white font-medium px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+                            <i data-lucide="file-text" class="w-4 h-4"></i> Export PDF
+                        </button>
+                    </div>
                 </div>
-                <form onsubmit="handleMemberRegistration(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="newFullName" required placeholder="Jina Kamili" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
-                    <input type="email" id="newEmail" placeholder="Email (Si lazima)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
-                    <select id="newModule" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
-                        <option value="UI/UX & Tailwind Layouts">UI/UX & Tailwind Layouts</option>
-                        <option value="JS Form Validation">JS Form Validation</option>
-                        <option value="QA & System Testing">QA & System Testing</option>
-                        <option value="Docs & Data Entry">Docs & Data Entry</option>
-                        <option value="Backend Core Architecture">Backend Core Architecture</option>
-                    </select>
-                    <button type="submit" class="md:col-span-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-lg text-sm transition">
-                        Msajili Mjumbe (Random ID TCC_PRG_XXXX & Password 123456)
-                    </button>
-                </form>
+
+                <!-- Register Member -->
+                <div class="bg-white dark:bg-slate-800 border border-blue-500/30 rounded-2xl p-6 shadow-md space-y-4">
+                    <div class="flex items-center gap-2 text-blue-500">
+                        <i data-lucide="user-plus"></i>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="registerMember">Msajili Mjumbe Mpya (Admin Only)</h3>
+                    </div>
+                    <form onsubmit="handleMemberRegistration(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="newFullName" required placeholder="Jina Kamili" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+                        <input type="email" id="newEmail" placeholder="Email (Si lazima)" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+                        <select id="newModule" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+                            <option value="UI/UX & Tailwind Layouts">UI/UX & Tailwind Layouts</option>
+                            <option value="JS Form Validation">JS Form Validation</option>
+                            <option value="QA & System Testing">QA & System Testing</option>
+                            <option value="Docs & Data Entry">Docs & Data Entry</option>
+                            <option value="Backend Core Architecture">Backend Core Architecture</option>
+                        </select>
+                        <button type="submit" class="md:col-span-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-lg text-sm transition" data-i18n="registerBtn">
+                            Msajili Mjumbe (Random ID TCC_PRG_XXXX & Password 123456)
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Password Reset Requests Queue -->
+                <div class="bg-white dark:bg-slate-800 border border-amber-500/30 rounded-2xl p-6 shadow-md space-y-4">
+                    <div class="flex items-center gap-2 text-amber-500">
+                        <i data-lucide="key-round"></i>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="resetRequests">Maombi ya Password Reset</h3>
+                    </div>
+                    <div id="resetRequestsList" class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                        <p class="italic text-slate-400">Hakuna maombi ya reset kwa sasa.</p>
+                    </div>
+                </div>
+
+                <!-- Manage Members List -->
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-md space-y-4">
+                    <div class="flex items-center gap-2 text-cyan-500">
+                        <i data-lucide="users"></i>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="membersList">Orodha ya Wajumbe wote & Actions</h3>
+                    </div>
+                    <div id="membersListTable" class="overflow-x-auto"></div>
+                </div>
             </section>
 
-            <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center gap-2 mb-4 text-emerald-400">
+            <!-- LIVE CODE EDITOR / PLAYGROUND -->
+            <section class="bg-white dark:bg-slate-800 border border-cyan-500/30 rounded-2xl p-6 shadow-md space-y-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2 text-cyan-500">
+                        <i data-lucide="code"></i>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="codeEditorTitle">GSMS Live Code Editor & Runner</h3>
+                    </div>
+                    <button onclick="runCode()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-4 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+                        <i data-lucide="play" class="w-4 h-4"></i> Run Code
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="codeLabel">Andika HTML / CSS / JS Code Hapa:</label>
+                        <textarea id="codeSource" rows="8" class="w-full bg-slate-900 font-mono border border-slate-700 rounded-xl p-3 text-xs text-emerald-400 focus:outline-none focus:border-cyan-500" placeholder="<!-- Andika kodi yako hapa -->&#10;<h1 style='color: cyan;'>Hello GSMS Team!</h1>"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="previewLabel">Live Preview Output:</label>
+                        <div class="bg-white rounded-xl h-[190px] border border-slate-300 dark:border-slate-700 overflow-hidden shadow-inner">
+                            <iframe id="codePreview" class="w-full h-full border-0"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SUBMIT WORK PROGRESS & MEDIA PROOF -->
+            <section class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-md">
+                <div class="flex items-center gap-2 mb-4 text-emerald-500">
                     <i data-lucide="upload-cloud"></i>
-                    <h3 class="font-bold text-white text-lg">Tuma Progress na Picha/Video Proof</h3>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="submitProgress">Tuma Progress na Picha/Video Proof</h3>
                 </div>
                 <form onsubmit="handleWorkSubmission(event)" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">Percentage (% Completeness)</label>
-                            <input type="number" id="subProgress" min="0" max="100" required placeholder="0 - 100" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
+                            <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="percentage">Percentage (% Completeness)</label>
+                            <input type="number" id="subProgress" min="0" max="100" required placeholder="0 - 100" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">Upload Picha au Video Proof</label>
-                            <input type="file" id="subMedia" accept="image/*,video/*" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
+                            <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="uploadMedia">Upload Picha au Video Proof</label>
+                            <input type="file" id="subMedia" accept="image/*,video/*" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-500">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">Maelezo ya Kazi / Changamoto</label>
-                        <textarea id="subNotes" rows="2" required placeholder="Eleza kazi uliyofanya leo..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"></textarea>
+                        <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1" data-i18n="notes">Maelezo ya Kazi / Changamoto</label>
+                        <textarea id="subNotes" rows="2" required placeholder="Eleza kazi uliyofanya..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm"></textarea>
                     </div>
-                    <button type="submit" id="submitWorkBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2 rounded-lg text-sm transition">
+                    <button type="submit" id="submitWorkBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2 rounded-lg text-sm transition" data-i18n="saveProgress">
                         Hifadhi Progress
                     </button>
                 </form>
             </section>
 
-            <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
-                <h3 class="font-bold text-white text-lg flex items-center gap-2">
-                    <i data-lucide="activity" class="text-amber-400"></i> Real-time Team Feed
+            <!-- REAL-TIME TEAM FEED -->
+            <section class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-md space-y-4">
+                <h3 class="font-bold text-slate-900 dark:text-white text-lg flex items-center gap-2">
+                    <i data-lucide="activity" class="text-amber-500"></i> <span data-i18n="feedTitle">Real-time Team Feed (Kazi za Wajumbe)</span>
                 </h3>
                 <div id="submissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </section>
 
-            <section class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
-                <h3 class="font-bold text-white text-lg flex items-center gap-2">
-                    <i data-lucide="message-square" class="text-cyan-400"></i> Live Team Inquiries & Chat
+            <!-- REAL-TIME CHAT -->
+            <section class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-md space-y-4">
+                <h3 class="font-bold text-slate-900 dark:text-white text-lg flex items-center gap-2">
+                    <i data-lucide="message-square" class="text-cyan-500"></i> <span data-i18n="chatTitle">Live Team Inquiries & Chat</span>
                 </h3>
-                <div id="chatBox" class="bg-slate-900 border border-slate-700 rounded-xl p-4 h-64 overflow-y-auto space-y-3"></div>
+                <div id="chatBox" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 h-64 overflow-y-auto space-y-3"></div>
                 <form onsubmit="handleSendChat(event)" class="flex gap-2">
-                    <input type="text" id="chatInput" required placeholder="Andika swali au ujumbe..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white">
-                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
+                    <input type="text" id="chatInput" required placeholder="Andika swali au ujumbe..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-sm">
+                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition" data-i18n="send">
                         Tuma
                     </button>
                 </form>
@@ -147,44 +245,162 @@
         </main>
     </div>
 
+    <!-- JS LOGIC CONTROLLER -->
     <script>
         lucide.createIcons();
         let currentUser = null;
+        let currentLang = 'sw';
 
-        async function handleAdminSetup(event) {
-            event.preventDefault();
-            const btn = document.getElementById('adminBtn');
-            btn.innerText = "Inasajili...";
-            btn.disabled = true;
+        // DICTIONARY FOR MULTI-LANGUAGE
+        const i18n = {
+            sw: {
+                subtitle: "Mfumo wa Usimamizi na Progress ya Timu",
+                userLogin: "Login Ya Watumiaji",
+                signIn: "Sign In",
+                forgotPass: "Umesahau Password?",
+                adminSetup: "Usajili Wa Lead Admin Mpya",
+                createAdmin: "Tengeneza Lead Admin",
+                logout: "Logout",
+                exportTitle: "Ripoti & Export Data",
+                exportSub: "Pakua orodha ya wajumbe na kazi zao kwa CSV au PDF",
+                registerMember: "Msajili Mjumbe Mpya (Admin Only)",
+                registerBtn: "Msajili Mjumbe (Random ID & Password 123456)",
+                resetRequests: "Maombi ya Password Reset",
+                membersList: "Orodha ya Wajumbe wote & Actions",
+                codeEditorTitle: "GSMS Live Code Editor & Runner",
+                codeLabel: "Andika HTML / CSS / JS Code Hapa:",
+                previewLabel: "Live Preview Output:",
+                submitProgress: "Tuma Progress na Picha/Video Proof",
+                percentage: "Percentage (% Completeness)",
+                uploadMedia: "Upload Picha au Video Proof",
+                notes: "Maelezo ya Kazi / Changamoto",
+                saveProgress: "Hifadhi Progress",
+                feedTitle: "Real-time Team Feed (Kazi za Wajumbe)",
+                chatTitle: "Live Team Inquiries & Chat",
+                send: "Tuma"
+            },
+            en: {
+                subtitle: "Team Operations & Progress Tracking System",
+                userLogin: "User Authentication",
+                signIn: "Sign In",
+                forgotPass: "Forgot Password?",
+                adminSetup: "New Lead Admin Registration",
+                createAdmin: "Create Lead Admin",
+                logout: "Logout",
+                exportTitle: "Reports & Data Export",
+                exportSub: "Download members list and progress logs via CSV or PDF",
+                registerMember: "Register New Member (Admin Only)",
+                registerBtn: "Register Member (Random ID & Default Password 123456)",
+                resetRequests: "Password Reset Requests",
+                membersList: "All Registered Members & Actions",
+                codeEditorTitle: "GSMS Live Code Editor & Sandbox",
+                codeLabel: "Write HTML / CSS / JS Code Here:",
+                previewLabel: "Live Output Preview:",
+                submitProgress: "Submit Progress & Media Proof",
+                percentage: "Percentage (% Completeness)",
+                uploadMedia: "Upload Image or Video Proof",
+                notes: "Task Description / Challenges",
+                saveProgress: "Submit Progress",
+                feedTitle: "Real-time Team Activity Feed",
+                chatTitle: "Live Team Inquiries & Discussions",
+                send: "Send"
+            }
+        };
 
-            const name = document.getElementById('adminName').value.trim();
-            const email = document.getElementById('adminEmail').value.trim();
-            const pass = document.getElementById('adminPassword').value.trim();
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    elem.innerText = i18n[lang][key];
+                }
+            });
+        }
 
-            try {
-                const { data, error } = await _supabase.from('profiles').insert([{
-                    reg_no: 'TCC_ADMIN',
-                    full_name: name,
-                    email: email,
-                    password: pass,
-                    role: 'admin',
-                    module_assigned: 'Lead Admin'
-                }]).select();
-
-                if (error) throw error;
-
-                alert("🎉 Lead Admin amesajiliwa kikamilifu!\n\nIngia sasa hivi kwa Email au Reg No TCC_ADMIN.");
-                document.getElementById('loginIdentifier').value = email;
-                document.getElementById('loginPassword').value = pass;
-
-            } catch (err) {
-                alert("Usajili Umefeli: " + err.message);
-            } finally {
-                btn.innerText = "Tengeneza Lead Admin";
-                btn.disabled = false;
+        // DARK / LIGHT THEME TOGGLE
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btnText = document.getElementById('themeBtnText');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                btnText.innerText = "Light Mode";
+            } else {
+                html.classList.add('dark');
+                btnText.innerText = "Dark Mode";
             }
         }
 
+        // CHECK IF ADMIN EXISTS ON INIT
+        async function checkAdminStatus() {
+            try {
+                const { data } = await _supabase.from('profiles').select('id').eq('role', 'admin');
+                if (!data || data.length === 0) {
+                    document.getElementById('adminForm').classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Error checking admin:", err);
+            }
+        }
+        checkAdminStatus();
+
+        // CODE RUNNER
+        function runCode() {
+            const src = document.getElementById('codeSource').value;
+            const iframe = document.getElementById('codePreview');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(src);
+            doc.close();
+        }
+
+        // EXPORT TO CSV
+        async function exportCSV() {
+            const { data: profiles } = await _supabase.from('profiles').select('*');
+            if (!profiles || profiles.length === 0) return alert("Hakuna taarifa za kutosha ku-export!");
+
+            let csvContent = "data:text/csv;charset=utf-8,Reg No,Name,Email,Module,Role\n";
+            profiles.forEach(p => {
+                csvContent += `${p.reg_no},${p.full_name},${p.email || 'N/A'},${p.module_assigned || 'N/A'},${p.role}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "GSMS_Team_Members.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // EXPORT TO PDF
+        async function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const { data: profiles } = await _supabase.from('profiles').select('*');
+            if (!profiles || profiles.length === 0) return alert("Hakuna taarifa za kutosha ku-export!");
+
+            doc.setFontSize(16);
+            doc.text("GSMS Team Hub - Orodha ya Wajumbe", 14, 15);
+
+            const tableRows = profiles.map(p => [
+                p.reg_no,
+                p.full_name,
+                p.email || 'N/A',
+                p.module_assigned || 'N/A',
+                p.role
+            ]);
+
+            doc.autoTable({
+                head: [['Reg No', 'Jina Kamili', 'Email', 'Module', 'Role']],
+                body: tableRows,
+                startY: 25,
+            });
+
+            doc.save("GSMS_Team_Report.pdf");
+        }
+
+        // LOGIN
         async function handleLogin(event) {
             event.preventDefault();
             const btn = document.getElementById('loginBtn');
@@ -214,7 +430,58 @@
             } catch (err) {
                 alert("Hitilafu wakati wa Login: " + err.message);
             } finally {
-                btn.innerText = "Sign In";
+                btn.innerText = i18n[currentLang].signIn;
+                btn.disabled = false;
+            }
+        }
+         // FORGOT PASSWORD REQUEST
+        async function requestPasswordReset() {
+            const regOrEmail = prompt("Tafadhali ingiza Registration Number au Email yako:");
+            if (!regOrEmail) return;
+
+            try {
+                const { error } = await _supabase.from('reset_requests').insert([{
+                    identifier: regOrEmail.trim(),
+                    status: 'pending'
+                }]);
+
+                if (error) throw error;
+                alert("✅ Ombi lako la password reset limetumwa kwa Admin! Akilipitisha, password yako itakuwa: 123456");
+            } catch (err) {
+                alert("Ombi limeshindikana: " + err.message);
+            }
+        }
+
+        // SETUP ADMIN
+        async function handleAdminSetup(event) {
+            event.preventDefault();
+            const btn = document.getElementById('adminBtn');
+            btn.innerText = "Inasajili...";
+            btn.disabled = true;
+
+            const name = document.getElementById('adminName').value.trim();
+            const email = document.getElementById('adminEmail').value.trim();
+            const pass = document.getElementById('adminPassword').value.trim();
+
+            try {
+                const { error } = await _supabase.from('profiles').insert([{
+                    reg_no: 'TCC_ADMIN',
+                    full_name: name,
+                    email: email,
+                    password: pass,
+                    role: 'admin',
+                    module_assigned: 'Lead Admin'
+                }]);
+
+                if (error) throw error;
+
+                alert("🎉 Lead Admin amesajiliwa kikamilifu!");
+                location.reload();
+
+            } catch (err) {
+                alert("Usajili Umefeli: " + err.message);
+            } finally {
+                btn.innerText = i18n[currentLang].createAdmin;
                 btn.disabled = false;
             }
         }
@@ -228,13 +495,113 @@
 
             if (currentUser.role === 'admin') {
                 document.getElementById('adminPanel').classList.remove('hidden');
+                fetchResetRequests();
+                fetchAllMembers();
             }
 
             fetchSubmissions();
             fetchChats();
             subscribeRealtime();
+            runCode();
         }
 
+        // ADMIN: FETCH RESET REQUESTS
+        async function fetchResetRequests() {
+            const { data, error } = await _supabase.from('reset_requests').select('*').eq('status', 'pending');
+            if (error) return;
+
+            const container = document.getElementById('resetRequestsList');
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="italic text-slate-400">Hakuna maombi ya reset kwa sasa.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            data.forEach(req => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-slate-50 dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-700";
+                div.innerHTML = `
+                    <span>Ombi kutoka: <strong class="text-amber-500">${req.identifier}</strong></span>
+                    <button onclick="approveReset('${req.id}', '${req.identifier}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-xs">
+                        Approve & Reset (Set password: 123456)
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        // ADMIN: APPROVE RESET
+        async function approveReset(reqId, identifier) {
+            try {
+                const { error: userErr } = await _supabase.from('profiles')
+                    .update({ password: '123456' })
+                    .or(`reg_no.eq.${identifier},email.eq.${identifier}`);
+
+                if (userErr) throw userErr;
+
+                await _supabase.from('reset_requests').update({ status: 'approved' }).eq('id', reqId);
+
+                alert("✅ Password imebadilishwa kuwa 123456 kikamilifu!");
+                fetchResetRequests();
+            } catch (err) {
+                alert("Hitilafu: " + err.message);
+            }
+        }
+
+        // ADMIN: FETCH ALL MEMBERS
+        async function fetchAllMembers() {
+            const { data, error } = await _supabase.from('profiles').select('*');
+            if (error) return;
+
+            const tableBox = document.getElementById('membersListTable');
+            let html = `
+                <table class="w-full text-xs text-left text-slate-700 dark:text-slate-300 border-collapse">
+                    <thead class="bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 uppercase">
+                        <tr>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Reg No</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Jina</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Module</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Role</th>
+                            <th class="p-2 border border-slate-200 dark:border-slate-700">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(m => {
+                html += `
+                    <tr class="border-b border-slate-200 dark:border-slate-700">
+                        <td class="p-2 font-mono text-blue-600 dark:text-blue-400">${m.reg_no}</td>
+                        <td class="p-2 font-medium">${m.full_name}</td>
+                        <td class="p-2">${m.module_assigned || 'N/A'}</td>
+                        <td class="p-2 font-bold ${m.role === 'admin' ? 'text-amber-500' : 'text-slate-500'}">${m.role}</td>
+                        <td class="p-2 space-x-2">
+                            ${m.role !== 'admin' ? `
+                                <button onclick="deleteMember('${m.reg_no}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2 py-1 rounded">Delete</button>
+                            ` : '<span class="text-slate-400">Master</span>'}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            tableBox.innerHTML = html;
+        }
+
+        // ADMIN: DELETE MEMBER
+        async function deleteMember(regNo) {
+            if (!confirm(`Je, una uhakika unataka kumfuta mjumbe ${regNo}?`)) return;
+
+            try {
+                const { error } = await _supabase.from('profiles').delete().eq('reg_no', regNo);
+                if (error) throw error;
+                alert(" Mjumbe amefutwa!");
+                fetchAllMembers();
+            } catch (err) {
+                alert("Imeshindikana kumfuta: " + err.message);
+            }
+        }
+
+        // MEMBER REGISTRATION
         async function handleMemberRegistration(event) {
             event.preventDefault();
             const name = document.getElementById('newFullName').value.trim();
@@ -256,12 +623,13 @@
 
                 alert(`🎉 Mjumbe Amesajiliwa!\n\nID: ${randomReg}\nPassword: 123456`);
                 event.target.reset();
+                fetchAllMembers();
 
             } catch (err) {
                 alert("Usajili Umefeli: " + err.message);
             }
         }
-
+        // WORK SUBMISSION
         async function handleWorkSubmission(event) {
             event.preventDefault();
             const btn = document.getElementById('submitWorkBtn');
@@ -302,11 +670,12 @@
             } catch (err) {
                 alert("Imeshindikana kupakia progress: " + err.message);
             } finally {
-                btn.innerText = "Hifadhi Progress";
+                btn.innerText = i18n[currentLang].saveProgress;
                 btn.disabled = false;
             }
         }
 
+        // FETCH SUBMISSIONS WITH PERMISSION CONTROL
         async function fetchSubmissions() {
             const { data, error } = await _supabase.from('submissions').select('*').order('created_at', { ascending: false });
             if (error) return;
@@ -316,7 +685,7 @@
 
             data?.forEach(sub => {
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-3";
+                card.className = "bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4 rounded-xl space-y-3 relative shadow-sm";
                 let mediaElement = '';
 
                 if (sub.media_url) {
@@ -327,21 +696,41 @@
                     }
                 }
 
+                const canDelete = currentUser.role === 'admin' || currentUser.reg_no === sub.reg_no;
+
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
-                            <h4 class="font-bold text-white text-sm">${sub.full_name} <span class="text-xs font-normal text-slate-400">(${sub.reg_no})</span></h4>
-                            <p class="text-xs text-blue-400">${sub.module}</p>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">${sub.full_name} <span class="text-xs font-normal text-slate-500 dark:text-slate-400">(${sub.reg_no})</span></h4>
+                            <p class="text-xs text-blue-600 dark:text-blue-400">${sub.module}</p>
                         </div>
-                        <span class="text-xs font-bold text-emerald-400 bg-emerald-950 px-2 py-1 rounded">${sub.progress_pct}%</span>
+                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-1 rounded">${sub.progress_pct}%</span>
                     </div>
-                    <p class="text-xs text-slate-300">${sub.notes}</p>
+                    <p class="text-xs text-slate-700 dark:text-slate-300">${sub.notes}</p>
                     ${mediaElement}
+                    ${canDelete ? `
+                        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                            <button onclick="deleteSubmission('${sub.id}')" class="text-xs text-rose-500 hover:underline">Futa Kazi Hii</button>
+                        </div>
+                    ` : ''}
                 `;
                 list.appendChild(card);
             });
         }
 
+        // DELETE SUBMISSION
+        async function deleteSubmission(id) {
+            if (!confirm("Je, una uhakika unataka kufuta kazi hii?")) return;
+            try {
+                const { error } = await _supabase.from('submissions').delete().eq('id', id);
+                if (error) throw error;
+                fetchSubmissions();
+            } catch (err) {
+                alert("Imeshindikana kufuta: " + err.message);
+            }
+        }
+
+        // CHATS
         async function handleSendChat(event) {
             event.preventDefault();
             const input = document.getElementById('chatInput');
@@ -370,7 +759,7 @@
             data?.forEach(m => {
                 const div = document.createElement('div');
                 div.className = "text-xs space-y-0.5";
-                div.innerHTML = `<strong class="text-cyan-400">${m.sender_name} (${m.reg_no}):</strong> <span class="text-slate-200">${m.message}</span>`;
+                div.innerHTML = `<strong class="text-cyan-600 dark:text-cyan-400">${m.sender_name} (${m.reg_no}):</strong> <span class="text-slate-800 dark:text-slate-200">${m.message}</span>`;
                 box.appendChild(div);
             });
             box.scrollTop = box.scrollHeight;
@@ -380,6 +769,7 @@
             _supabase.channel('public-changes')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchChats)
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, fetchSubmissions)
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'reset_requests' }, fetchResetRequests)
                 .subscribe();
         }
 
